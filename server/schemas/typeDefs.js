@@ -1,6 +1,6 @@
 const { gql } = require('apollo-server-express');
 
-// these typeDefs match the models in ./models
+// these typeDefs match the mongo models in ./models
 const typeDefs = gql`
 
 type User {
@@ -13,13 +13,13 @@ type User {
 
 type Book {
     bookId : String
-    authors : [String]!
+    authors : [String]
     description : String
     title : String
     image : String
     link : String
     },
-    
+
 type Auth {
     token : String
     user : User

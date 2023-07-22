@@ -2,6 +2,7 @@ const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
 const { User } = require('../models');
 
+// define functions to back the typeDefs
 const resolvers = {
     Query: {
         me: async (parent, { userId }) => {

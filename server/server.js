@@ -12,6 +12,7 @@ const server = new ApolloServer ({ // added
 })
 const PORT = process.env.PORT || 3001;
 
+// apply middleware to our server to encode url data and json data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
