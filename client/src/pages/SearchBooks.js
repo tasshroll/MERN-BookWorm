@@ -9,8 +9,11 @@ import {
 } from 'react-bootstrap';
 
 import Auth from '../utils/auth';
-import { saveBook, searchGoogleBooks } from '../utils/API';
+//import { saveBook, searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
+// query needed for apollo server
+import { SAVE_BOOK } from '../utils/mutations';
+
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -26,6 +29,10 @@ const SearchBooks = () => {
   useEffect(() => {
     return () => saveBookIds(savedBookIds);
   });
+
+  // Define the mutation hook
+  const [saveBook] = useMutation(SAVE_BOOK);  // added
+
 
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event) => {
@@ -51,13 +58,22 @@ const SearchBooks = () => {
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || '',
       }));
-
+      // setSearchedBooks will update SearchedBooks with a list of all retreived books from Google Books 
       setSearchedBooks(bookData);
       setSearchInput('');
     } catch (err) {
       console.error(err);
     }
   };
+
+
+
+
+
+
+
+
+
 
   // create function to handle saving a book to our database
   const handleSaveBook = async (bookId) => {
@@ -72,11 +88,18 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await saveBook(bookToSave, token);
+      // const response = await saveBook(bookToSave, token);
+      
+      // Execute the saveBook mutation
+      const { data } = await saveBook({ variables: { input: bookToSave } }); 
 
-      if (!response.ok) {
+      if (!data || !data.saveBook) {
         throw new Error('something went wrong!');
       }
+
+      // if (!response.ok) {
+      //   throw new Error('something went wrong!');
+      // }
 
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
