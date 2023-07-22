@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
+
 import {
   Container,
   Card,
@@ -17,12 +20,15 @@ import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
-  
+  // destructure vars  used to handle the state of the GraphQL query 
+  // execution and access the data returned from the query.
   const { loading, data } = useQuery(GET_ME); // added
   const [removeBook] = useMutation(REMOVE_BOOK); // added
 
+  // Accessing the user data from the query result
+  const userData = data ? data.me : {};
 
-  const [userData, setUserData] = useState({});
+  const [setUserData] = useState({});
 
   // use this to determine if `useEffect()` hook needs to run again
   // const userDataLength = Object.keys(userData).length;
@@ -55,8 +61,8 @@ const SavedBooks = () => {
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
-    
-    
+
+
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -71,9 +77,20 @@ const SavedBooks = () => {
       //   throw new Error('something went wrong!');
       // }
 
+      // const updatedUser = await response.json()
 
-      const updatedUser = await response.json();
-      setUserData(updatedUser);
+
+      // use GraphQL queries and mutations instead of REST APIs
+      const { data } = await removeBook({
+        variables: { bookId },
+      });
+
+      if (!data || !data.removeBook) {
+        throw new Error('something went wrong');
+      }
+
+      setUserData(data.removeBook);
+
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
@@ -81,8 +98,8 @@ const SavedBooks = () => {
     }
   };
 
-  // if data isn't here yet, say so
-  if (!userDataLength) {
+  // loading is from the useQuery hook 
+  if (loading) {
     return <h2>LOADING...</h2>;
   }
 
