@@ -2,7 +2,8 @@ const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
 const { User } = require('../models');
 
-// define functions to back the typeDefs
+// the resolvers are responsible for providing the implementation for the queries and mutations 
+// defined in the schema (typeDefs). They back the typeDefs
 const resolvers = {
     Query: {
         me: async (parent, { userId }) => {

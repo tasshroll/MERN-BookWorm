@@ -1,5 +1,8 @@
 import { gql } from '@apollo/client';
 
+// Define GraphQL mutations to correspond with a specific action or operation 
+// that can be performed on the server-side data. 
+// Server Resolvers 
 export const LOGIN_USER = gql`
   mutation login ($username: String!, email: String, password: String) {
     login(username: $username, email: $email, password: $password) {
