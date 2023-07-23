@@ -13,7 +13,7 @@ const resolvers = {
     Mutation: {
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
-            if (!User) {
+            if (!user) {
                 throw new AuthenticationError('No user with this email');
             }
 
