@@ -1,10 +1,10 @@
 import { gql } from '@apollo/client';
 
-// Define GraphQL mutations to correspond with a specific action or operation 
-// that can be performed on the server-side data. 
+// Define GraphQL mutations to correspond specific actions 
+// that are performed on the server-side data. 
 // Server Resolvers 
 export const LOGIN_USER = gql`
-  mutation login ($username: String!, email: String, password: String) {
+  mutation login ($username: String!, $email: String, $password: String) {
     login(username: $username, email: $email, password: $password) {
       _id
       username
@@ -14,7 +14,7 @@ export const LOGIN_USER = gql`
   }
 `;
 export const ADD_USER = gql`
-  mutation addUser($username: String!, email: String, password: String) {
+  mutation addUser($username: String!, $email: String, $password: String) {
     addUser(username: $username, email: $email, password: $password) {
       _id
       username
@@ -25,7 +25,7 @@ export const ADD_USER = gql`
 `;
 
 export const SAVE_BOOK = gql`
-  mutation saveBook($authors: [String], description: String, title: String, bookId: String, image: String, link: String) {
+  mutation saveBook($authors: [String], $description: String, $title: String, $bookId: String, $image: String, $link: String) {
     saveBook (authors: $authors, description: $description, title: $title, bookId: $bookId, image: $image, link: $link) {
       authors
       description
@@ -38,7 +38,7 @@ export const SAVE_BOOK = gql`
 `;
 
 export const REMOVE_BOOK = gql`
-  mutation removeBook($_id: ID!, bookId: String) {
+  mutation removeBook($_id: ID!, $bookId: String) {
     removeBook (_id: $_id, bookId: $bookId) {
       _id
       bookId
