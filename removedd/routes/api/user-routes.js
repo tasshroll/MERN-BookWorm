@@ -5,10 +5,10 @@ const {
   saveBook,
   deleteBook,
   login,
-} = require('../../controllers/user-controller');
+} = require('../../../server/controllers/user-controller');
 
 // import middleware
-const { authMiddleware } = require('../../utils/auth');
+const { authMiddleware } = require('../../../server/utils/auth');
 
 // put authMiddleware anywhere we need to send a token for verification of user
 router.route('/').post(createUser).put(authMiddleware, saveBook);

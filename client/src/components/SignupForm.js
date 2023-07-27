@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'; // ADDED
 
 import { ADD_USER } from '../utils/mutations'; // ADDED
 
-import { createUser } from '../utils/API';
+//import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
 
 const SignupForm = () => {
@@ -15,41 +15,32 @@ const SignupForm = () => {
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
-  const [addUser, { error }] = useMutation(ADD_USER); // ADDED
+  // hook that takes a GraphQL mutation and returns a function "addUser" function and object "data" that contains the data returned from the mutation
+  const [addUser, { error, data }] = useMutation( ADD_USER ); // ADDED
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    console.log(event.target);
     setUserFormData({ ...userFormData, [name]: value });
   };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
-    // check if form has everything (as per react-bootstrap docs)
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+    console.log(userFormData);
 
     try {
       // const response = await createUser(userFormData);
+      // addUser sends the mutation to the GraphQL server and it returns a object with a token and user property
+      const { data } = await addUser({ 
+        variables: { ...userFormData },
+       }); // ADDED
+       console.log("new user is ", data.addUser);
 
-      // if (!response.ok) {
-      //   throw new Error('something went wrong!');
-      // }
+      Auth.login(data.addUser.token); // ADDED
 
-      const {response, error} = await addUser({ variables: { username: userFormData.username, password: userFormData.password, email: userFormData.email } }); // ADDED
-      
-      if (error) {
-        throw new Error('something went wrong!');
-      }
-      const { token, user } = await response.json();
-      console.log(response);
-      Auth.login(token);
     } catch (err) {
       console.error(err);
-      setShowAlert(true);
+      // setShowAlert(true);
     }
 
     setUserFormData({
