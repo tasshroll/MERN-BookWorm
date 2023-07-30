@@ -8,8 +8,8 @@ module.exports = {
   // function for our authenticated routes
   authMiddleware: function ({req}) {
 
-    // allows token to be sent via  req.query or headers
-    let token = req.query.token || req.headers.authorization;
+    // allows token to be sent via  req.body, req.query, or headers
+    let token = req.body.token || req.query.token || req.headers.authorization;
 
     // ["Bearer", "<tokenvalue>"]
     if (req.headers.authorization) {
@@ -20,7 +20,7 @@ module.exports = {
       return req;
     }
 
-    // verify token and get user data out of it
+    // verify token and get user data (username, email, _id) out of it
     try {
       const { data } = jwt.verify(token, secret, { maxAge: expiration });
       req.user = data;
@@ -31,9 +31,11 @@ module.exports = {
     // send to next endpoint
     return req;
   },
-  
-  signToken: function ({ user, email, _id }) {
-    const payload = { user, email, _id };
+
+  // signToken will hold the username, email, and _id properties
+  // password is not stored because it is sensitive data
+  signToken: function ({ username, email, _id }) {
+    const payload = { username, email, _id };
 
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },

@@ -4,34 +4,58 @@ import { gql } from '@apollo/client';
 // that are performed on the server-side data. 
 // Server Resolvers 
 export const LOGIN_USER = gql`
-  mutation login ($username: String!, $email: String, $password: String) {
-    login(username: $username, email: $email, password: $password) {
+mutation login($email: String, $password: String) {
+  login(email: $email, password: $password) {
+    token
+    user {
       _id
-      username
       email
+      username
     }
   }
+}
 `;
 export const ADD_USER = gql`
-  mutation addUser($username: String!, $email: String, $password: String) {
-    addUser(username: $username, email: $email, password: $password) {
+mutation addUser($username: String, $email: String, $password: String) {
+  addUser(username: $username, email: $email, password: $password) {
+    token
+    user {
+      _id
+      email
+      username
+    }
+  }
+}
+`;
+
+// export const SAVE_BOOK = gql`
+//   mutation saveBook($bookInfo: BookInfo, $userId: ID) {
+//     saveBook(bookInfo: $bookInfo, userId: $userId) {
+//       authors
+//       description
+//       title
+//       bookId
+//       image
+//       link
+//       userId
+//     }
+//   }
+// `;
+
+export const SAVE_BOOK = gql`
+  mutation saveBook($bookData: BookInfo!) {
+    saveBook(bookData: $bookData) {
       _id
       username
       email
-    }
-  }
-`;
-
-export const SAVE_BOOK = gql`
-  mutation saveBook($bookInfo: BookInfo, $userId: ID) {
-    saveBook(bookInfo: $bookInfo, userId: $userId) {
-      authors
-      description
-      title
-      bookId
-      image
-      link
-      userId
+      savedBooks {
+        bookId
+        authors
+        image
+        description
+        title
+        link
+      }
     }
   }
 `;

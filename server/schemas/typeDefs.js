@@ -1,6 +1,7 @@
 const { gql } = require('apollo-server-express');
 
 // these typeDefs match the mongo models in ./models
+// these are the objects that are returned when a user makes a query
 const typeDefs = gql`
 
 type User {
@@ -9,26 +10,21 @@ type User {
     email : String
     bookCount : Int
     savedBooks : [Book]
-    },
+    }
 
 type Book {
-    bookId : String
+    bookId : ID!
     authors : [String]
     description : String
     title : String
     image : String
     link : String
-    userId : ID
-    },
+    }
 
 type Auth {
-    token : String
+    token : ID
     user : User
-    },
-
-type Query {
-    me (userId : ID) : User
-    },
+}
 
 input BookInfo {
     authors : [String], 
@@ -37,14 +33,18 @@ input BookInfo {
     bookId : String, 
     image: String, 
     link: String
-    },
+}
+
+type Query {
+    me: User
+    }
 
 type Mutation {
-    login (email : String, password : String) : User
-    addUser(username : String, email: String, password: String) : User
-    saveBook(bookInfo : BookInfo, userId: ID) : Book
-    removeBook(bookId : ID, userId : ID) : Book
-    },
+    login (email : String, password : String) : Auth
+    addUser(username : String, email: String, password: String) : Auth
+    saveBook(bookData: BookInfo!): User
+    removeBook(bookId : ID) : User
+    }
 `;
 
 module.exports = typeDefs;

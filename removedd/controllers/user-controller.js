@@ -1,7 +1,7 @@
 // import user model
-const { User } = require('../models');
+const { User } = require('../../server/models');
 // import sign token function from auth
-const { signToken } = require('../utils/auth');
+const { signToken } = require('../../server/utils/auth');
 
 module.exports = {
   // get a single user by either their id or their username

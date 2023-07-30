@@ -26,7 +26,7 @@ const SignupForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log(userFormData);
+    // console.log(userFormData);
 
     try {
       // const response = await createUser(userFormData);
@@ -34,7 +34,7 @@ const SignupForm = () => {
       const { data } = await addUser({ 
         variables: { ...userFormData },
        }); // ADDED
-       console.log("new user is ", data.addUser);
+      //  console.log("new user is ", data.addUser);
 
       Auth.login(data.addUser.token); // ADDED
 

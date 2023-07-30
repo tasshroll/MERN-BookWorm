@@ -6,10 +6,12 @@ const { ApolloServer } = require('apollo-server-express'); // added
 const { typeDefs, resolvers } = require('./schemas'); // added
 const { authMiddleware } = require('./utils/auth'); // added
 
-const server = new ApolloServer({
+const server = new ApolloServer({ // added
   typeDefs,
   resolvers,
-  context: authMiddleware, // Pass authMiddleware to the context
+  // Pass function authMiddleware to resolverrs so context is made available
+  // to all resolvers to access the user data if the user is logged in
+  context: authMiddleware, 
 });
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -25,17 +27,12 @@ if (process.env.NODE_ENV === 'production') {
 
 // app.use(routes); // replaced with Apollo server
 
-// Replace app.use(routes) with a single route that serves the client
-app.get('/', (req, res) => {
+app.get('*', (req, res) => { // add
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
-// app.get('*', (req, res) => { // add
-//   res.sendFile(path.join(__dirname, '../client/build/index.html'));
-// });
-
 // Create new instance of an Apollo server with the GraphQL schema
-const startApolloServer = async () => { //add
+const startApolloServer = async (typeDefs, resolvers) => { //add
   await server.start();
   server.applyMiddleware({ app });
 
@@ -47,4 +44,4 @@ const startApolloServer = async () => { //add
 })
 };
 
-startApolloServer(); // add
+startApolloServer(typeDefs, resolvers); // add

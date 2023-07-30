@@ -12,10 +12,13 @@ const LoginForm = () => {
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [login, { error }] = useMutation(LOGIN_USER); // added
-
+  // useMutation is a hook from apollo client that returns a mutation function "login" and object "data" 
+  // useMutation hook takes a GraphQL mutation document (in this case, LOGIN_USER) as an argument and returns an array with two elements.
+  // The first element is the mutation function "login" that we'll use to execute the mutation.
+  // The second element in the array is an object "data" that contains the data returned from the mutation which is user (_id, username, email, bookcount, savedBooks) and token
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    console.log(name, value);
+
     setUserFormData({ ...userFormData, [name]: value });
   };
 
@@ -32,14 +35,12 @@ const LoginForm = () => {
     try {
       //const response = await loginUser(userFormData);
       // added
-      const { response, error } = await login({
+      const { data } = await login({
         variables: {
-          // username: userFormData.username, 
-          password: userFormData.password,
-          email: userFormData.email
+         ...userFormData
         }
       });
-      console.log(response, error);
+
 
       // if (!response.ok) {
       if (error) {
@@ -48,7 +49,7 @@ const LoginForm = () => {
 
       // const { token, user } = await response.json();
       // console.log(user);
-      // Auth.login(token);
+      Auth.login(data.login.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
