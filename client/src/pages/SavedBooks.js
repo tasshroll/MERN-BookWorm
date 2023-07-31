@@ -23,6 +23,7 @@ const SavedBooks = () => {
   // destructure vars  used to handle the state of the GraphQL query 
   // execution and access the data returned from the query.
   const { loading, data } = useQuery(GET_ME); // added
+  console.log("data is ", data);
   const [removeBook] = useMutation(REMOVE_BOOK); // added
 
   // Accessing the user data from the query result

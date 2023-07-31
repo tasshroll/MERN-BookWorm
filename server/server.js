@@ -26,10 +26,14 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // app.use(routes); // replaced with Apollo server
-
-app.get('*', (req, res) => { // add
+// two rooutes for handling client-side requests for the index.html file
+app.get("/", (req, res) => { // add
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
+
+// app.get("*", (req, res) => { // add
+//   res.sendFile(path.join(__dirname, '../client/build/index.html'));
+// });
 
 // Create new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async (typeDefs, resolvers) => { //add

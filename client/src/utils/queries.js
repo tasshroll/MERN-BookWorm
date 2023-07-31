@@ -19,13 +19,4 @@ export const GET_ME = gql`
   `;
 
 
-  // me {
-  //   users {
-  //     _id
-  //     name
-  //     email
-  //     savedBooks
-  //   }
-  // }
-
 
