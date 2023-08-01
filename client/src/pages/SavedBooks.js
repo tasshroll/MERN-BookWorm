@@ -22,12 +22,16 @@ import { removeBookId } from '../utils/localStorage';
 const SavedBooks = () => {
   // destructure vars  used to handle the state of the GraphQL query 
   // execution and access the data returned from the query.
+  // const { loading, data } = useQuery(GET_ME); // added
   const { loading, data } = useQuery(GET_ME); // added
-  console.log("data is ", data);
+
   const [removeBook] = useMutation(REMOVE_BOOK); // added
 
   // Accessing the user data from the query result
+  // const userData = data ? data.me : {};
   const userData = data ? data.me : {};
+  const savedBooks = userData.savedBooks || [];
+
 
   const [setUserData] = useState({});
 
@@ -80,7 +84,6 @@ const SavedBooks = () => {
 
       // const updatedUser = await response.json()
 
-
       // use GraphQL queries and mutations instead of REST APIs
       const { data } = await removeBook({
         variables: { bookId },
@@ -113,12 +116,16 @@ const SavedBooks = () => {
       </div>
       <Container>
         <h2 className='pt-5'>
-          {userData.savedBooks.length
-            ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
+          {/* {userData.savedBooks.length */}
+          {savedBooks?.length
+
+            // ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
+            ? `Viewing ${savedBooks.length} saved ${savedBooks.length === 1 ? 'book' : 'books'}:`
             : 'You have no saved books!'}
         </h2>
         <Row>
-          {userData.savedBooks.map((book) => {
+          {savedBooks.map((book) => {
+            {/* {userData.map((book) => { */ }
             return (
               <Col md="4">
                 <Card key={book.bookId} border='dark'>

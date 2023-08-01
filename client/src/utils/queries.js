@@ -2,20 +2,22 @@ import { gql } from '@apollo/client';
 
 // GraphQL query for "me" to return a user
 export const GET_ME = gql`
-  query 
+query me {
   me {
     _id
-    username
     email
+    username
     savedBooks {
-      bookId
       authors
-      image
+      bookId
       description
-      title
+      image
       link
+      title
     }
+    bookCount
   }
+}
   `;
 
 
